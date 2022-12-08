@@ -46,7 +46,7 @@ public class PlayerMiniMax implements IPlayer, IAuto {
      * @param profundidad
      * @return el moviment que fa el jugador.
      */
-    public Move move(GameStatus s, int profundidad) {
+    public Move move(GameStatus s) {
 
         ArrayList<Point> moves =  s.getMoves();
         int max = Integer.MIN_VALUE;
@@ -83,10 +83,11 @@ public class PlayerMiniMax implements IPlayer, IAuto {
     
      public int minimax(GameStatus s, int profunditat, int alpha, int beta, boolean esBendicion) {
         int valor;
+        ArrayList<Point> moves =  s.getMoves();
         // Si la profundidad ya ha llegado a su limite no habra mas movimientos
         // posibles, devolvemos la heurisica del tablero.
         if (profunditat == 0 || s.currentPlayerCanMove() == false) {
-            return heuristica(s);
+            return heuristica(s, moves);
         }
         // Inicializamos variables en funcion si es min o max
         CellType c = s.getCurrentPlayer();
@@ -107,7 +108,6 @@ public class PlayerMiniMax implements IPlayer, IAuto {
             }*/
         }
         // Para cada columna del tablero
-        ArrayList<Point> moves =  s.getMoves();
         for (int movi = 0; movi < moves.size(); movi++) {
             // Copia del tablero
             GameStatus x = new GameStatus(s);
@@ -157,8 +157,24 @@ public class PlayerMiniMax implements IPlayer, IAuto {
 
     }
 
-    public int heuristica(GameStatus s) {
-        return s.getScore(s.getCurrentPlayer());
+    public int heuristica(GameStatus s, ArrayList<Point> moves) {
+        int heuris = 0;
+        Point a = new Point(0,0);
+        Point b = new Point (0,7);
+        Point c = new Point (7,0);
+        Point d = new Point (7,7);
+        for (int movi = 0; movi < moves.size(); movi++) {
+            if (moves.get(movi) == a || moves.get(movi) == b || moves.get(movi) == c || moves.get(movi) == d){
+                heuris = 100000;
+            }
+            /*else if (moves.get(movi).){
+                heuris = 1000;
+            }*/
+            else{
+                heuris = s.getScore(s.getCurrentPlayer());
+            }
+        }
+        return heuris;
     }
 
 
